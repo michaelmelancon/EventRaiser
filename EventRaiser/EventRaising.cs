@@ -100,7 +100,7 @@ namespace EventRaiser
         /// <returns></returns>
         public static EventHandler<T> Resilient<T>(this EventHandler<T> handler, Action<EventHandler<T>, Exception> exceptionHandler) where T : EventArgs
         {
-            return handler.GetInvocationList().OfType<EventHandler<T>>().Select(h =>
+            return handler == null ? null : handler.GetInvocationList().OfType<EventHandler<T>>().Select(h =>
                 new EventHandler<T>(
                     (sender, args) =>
                     {
@@ -127,17 +127,17 @@ namespace EventRaiser
         }
 
         /// <summary>
-        /// 
+        /// Creates a ne
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="handler"></param>
         /// <returns></returns>
         public static EventHandler<T> Parallel<T>(this EventHandler<T> handler) where T : EventArgs
         {
-            return (handler != null) ? new EventHandler<T>((sender, args) =>
+            return handler == null ? null : new EventHandler<T>((sender, args) =>
                 System.Threading.Tasks.Parallel.Invoke(handler.GetInvocationList()
                     .OfType<EventHandler<T>>()
-                    .Select(i => new Action(() => i(sender, args))).ToArray())) : null;
+                    .Select(i => new Action(() => i(sender, args))).ToArray()));
         }
 
         /// <summary>
