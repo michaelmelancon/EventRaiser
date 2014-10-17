@@ -94,7 +94,7 @@ namespace EventRaiser
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">The type of <see cref="System.EventArgs"/> used by the handler.</typeparam>
         /// <param name="handler"></param>
         /// <param name="exceptionHandler"></param>
         /// <returns></returns>
@@ -118,7 +118,7 @@ namespace EventRaiser
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">The type of <see cref="System.EventArgs"/> used by the handler.</typeparam>
         /// <param name="handler"></param>
         /// <returns></returns>
         public static EventHandler<T> Resilient<T>(this EventHandler<T> handler) where T : EventArgs
@@ -129,7 +129,7 @@ namespace EventRaiser
         /// <summary>
         /// Creates a ne
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">The type of <see cref="System.EventArgs"/> used by the handler.</typeparam>
         /// <param name="handler"></param>
         /// <returns></returns>
         public static EventHandler<T> Parallel<T>(this EventHandler<T> handler) where T : EventArgs
@@ -143,7 +143,7 @@ namespace EventRaiser
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">The type of <see cref="System.EventArgs"/> used by the handler.</typeparam>
         /// <param name="handler"></param>
         /// <param name="continuation"></param>
         /// <returns></returns>
@@ -159,18 +159,18 @@ namespace EventRaiser
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">The type of <see cref="System.EventArgs"/> used by the handler.</typeparam>
         /// <param name="handler"></param>
         /// <returns></returns>
         public static EventHandler<T> Async<T>(this EventHandler<T> handler) where T : EventArgs
         {
-            return handler.Async(t => { if (t.IsFaulted) t.Exception.Handle((e) => true); });
+            return handler.Async(t => { if (t.IsFaulted) t.Exception.Handle(e => true); });
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">The type of <see cref="System.EventArgs"/> used by the handler.</typeparam>
         /// <param name="handler"></param>
         /// <param name="sender"></param>
         /// <param name="args"></param>
@@ -195,7 +195,7 @@ namespace EventRaiser
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">The type of <see cref="System.EventArgs"/> used by the handler.</typeparam>
         /// <param name="handler"></param>
         /// <param name="sender"></param>
         /// <param name="args"></param>
