@@ -41,7 +41,7 @@ namespace EventRaiser
             }
             catch (ArgumentException)
             {
-                throw new ArgumentException(string.Format("The method signature of the method referenced by this delegate is incompatible with System.EventHandler<{0}>.", typeof(T).FullName));
+                throw new ArgumentException(string.Format("The signature of the method referenced by this delegate is incompatible with System.EventHandler<{0}>.", typeof(T).FullName));
             }
         }
 
@@ -95,8 +95,8 @@ namespace EventRaiser
         /// 
         /// </summary>
         /// <typeparam name="T">The type of <see cref="System.EventArgs"/> used by the handler.</typeparam>
-        /// <param name="handler"></param>
-        /// <param name="exceptionHandler"></param>
+        /// <param name="handler">A <see cref="System.EventHandler{T}"/> whose invocation list should be invoked using <paramref name="exceptionHandler"/> to handle any exceptions.</param>
+        /// <param name="exceptionHandler">exception handling logic to be invoked </param>
         /// <returns></returns>
         public static EventHandler<T> Resilient<T>(this EventHandler<T> handler, Action<EventHandler<T>, Exception> exceptionHandler) where T : EventArgs
         {
@@ -127,11 +127,11 @@ namespace EventRaiser
         }
 
         /// <summary>
-        /// Creates a ne
+        /// Creates a new <see cref="System.EventHandler{T}"/> that invokes the invocation list of <paramref name="handler"/> in parallel.
         /// </summary>
         /// <typeparam name="T">The type of <see cref="System.EventArgs"/> used by the handler.</typeparam>
-        /// <param name="handler"></param>
-        /// <returns></returns>
+        /// <param name="handler">A <see cref="System.EventHandler{T}"/> whose invocation list should be invoked in parallel.</param>
+        /// <returns>A new <see cref="System.EventHandler{T}"/> that invokes the invocation list of <paramref name="handler"/> in parallel.</returns>
         public static EventHandler<T> Parallel<T>(this EventHandler<T> handler) where T : EventArgs
         {
             return handler == null ? null : new EventHandler<T>((sender, args) =>
@@ -149,11 +149,7 @@ namespace EventRaiser
         /// <returns></returns>
         public static EventHandler<T> Async<T>(this EventHandler<T> handler, Action<Task> continuation) where T : EventArgs
         {
-            return (sender, args) => Task.Factory.StartNew(() =>
-            {
-                if (handler != null)
-                    handler(sender, args);
-            }).ContinueWith(continuation);
+            return (sender, args) => handler.RaiseAsync(sender, args).ContinueWith(continuation);
         }
 
         /// <summary>
@@ -202,11 +198,7 @@ namespace EventRaiser
         /// <returns></returns>
         public static Task RaiseAsync<T>(this EventHandler<T> handler, object sender, T args) where T : EventArgs
         {
-            return Task.Factory.StartNew(() =>
-            {
-                if (handler != null)
-                    handler(sender, args);
-            });
+            return Task.Factory.StartNew(() => handler.Raise(sender, args));
         }
     }
 }

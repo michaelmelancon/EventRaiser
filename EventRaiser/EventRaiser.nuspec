@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://github.com/michaelmelancon/EventRaiser/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/michaelmelancon/EventRaiser/</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>$description$</description>
+    <copyright>Copyright 2014</copyright>
+    <tags>Functional Monad Events EventHandler Extension</tags>
+  </metadata>
+</package>
