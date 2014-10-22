@@ -9,4 +9,5 @@ using System.Reflection;
 [assembly: NeutralResourcesLanguage("en")]
 
 
+[assembly: AssemblyVersion("1.0.0")]
 [assembly: AssemblyInformationalVersion("1.0.0")]

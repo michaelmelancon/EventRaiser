@@ -92,11 +92,11 @@ namespace EventRaiser
         }
 
         /// <summary>
-        /// 
+        /// Creates a new <see cref="System.EventHandler{T}"/> with an invocation list equivilent to that of <paramref name="handler"/> except that the invocations have been wrapped with exception handling logic defined by <paramref name="exceptionHandler"/>.
         /// </summary>
         /// <typeparam name="T">The type of <see cref="System.EventArgs"/> used by the handler.</typeparam>
-        /// <param name="handler">A <see cref="System.EventHandler{T}"/> whose invocation list should be invoked using <paramref name="exceptionHandler"/> to handle any exceptions.</param>
-        /// <param name="exceptionHandler">exception handling logic to be invoked </param>
+        /// <param name="handler">A <see cref="System.EventHandler{T}"/> whose invocation list should be invoked using <paramref name="exceptionHandler"/> to handle any exceptions. </param>
+        /// <param name="exceptionHandler">Exception handling logic to be invoked. The original <paramref name="handler"/> and the exception will be passed to this delegate.</param>
         /// <returns></returns>
         public static EventHandler<T> Resilient<T>(this EventHandler<T> handler, Action<EventHandler<T>, Exception> exceptionHandler) where T : EventArgs
         {
@@ -116,11 +116,11 @@ namespace EventRaiser
         }
 
         /// <summary>
-        /// 
+        /// Creates a new <see cref="System.EventHandler{T}"/> with an invocation list equivilent to that of <paramref name="handler"/> except that the invocations have been wrapped with exception handling and will not throw exceptions.
         /// </summary>
         /// <typeparam name="T">The type of <see cref="System.EventArgs"/> used by the handler.</typeparam>
-        /// <param name="handler"></param>
-        /// <returns></returns>
+        /// <param name="handler">A <see cref="System.EventHandler{T}"/> whose invocation list should be made to not throw exceptions.</param>
+        /// <returns>a new <see cref="System.EventHandler{T}"/> that will not throw an exception</returns>
         public static EventHandler<T> Resilient<T>(this EventHandler<T> handler) where T : EventArgs
         {
             return handler.Resilient((h, exception) => { });
@@ -141,35 +141,35 @@ namespace EventRaiser
         }
 
         /// <summary>
-        /// 
+        /// Creates a new <see cref="System.EventHandler{T}"/> that invokes the <paramref name="handler"/> as a <see cref="System.Threading.Tasks.Task"/>. Exceptions must be handled in the continuation.
         /// </summary>
         /// <typeparam name="T">The type of <see cref="System.EventArgs"/> used by the handler.</typeparam>
-        /// <param name="handler"></param>
-        /// <param name="continuation"></param>
-        /// <returns></returns>
+        /// <param name="handler">A <see cref="System.EventHandler{T}"/> that should be invoked as a <see cref="System.Threading.Tasks.Task"/>.</param>
+        /// <param name="continuation">A continuation to execute when the <see cref="System.Threading.Tasks.Task"/> has completed.</param>
+        /// <returns>a new <see cref="System.EventHandler{T}"/> that invokes the <paramref name="handler"/> as a <see cref="System.Threading.Tasks.Task"/>.</returns>
         public static EventHandler<T> Async<T>(this EventHandler<T> handler, Action<Task> continuation) where T : EventArgs
         {
             return (sender, args) => handler.RaiseAsync(sender, args).ContinueWith(continuation);
         }
 
         /// <summary>
-        /// 
+        /// Creates a new <see cref="System.EventHandler{T}"/> that invokes the <paramref name="handler"/> as a <see cref="System.Threading.Tasks.Task"/>. Exceptions are handled, but ignored.
         /// </summary>
         /// <typeparam name="T">The type of <see cref="System.EventArgs"/> used by the handler.</typeparam>
-        /// <param name="handler"></param>
-        /// <returns></returns>
+        /// <param name="handler">A <see cref="System.EventHandler{T}"/> that should be invoked as a <see cref="System.Threading.Tasks.Task"/>.</param>
+        /// <returns>a new <see cref="System.EventHandler{T}"/> that invokes the <paramref name="handler"/> as a <see cref="System.Threading.Tasks.Task"/>.</returns>
         public static EventHandler<T> Async<T>(this EventHandler<T> handler) where T : EventArgs
         {
             return handler.Async(t => { if (t.IsFaulted) t.Exception.Handle(e => true); });
         }
 
         /// <summary>
-        /// 
+        /// Invokes the <paramref name="handler"/> if it is not null.
         /// </summary>
         /// <typeparam name="T">The type of <see cref="System.EventArgs"/> used by the handler.</typeparam>
-        /// <param name="handler"></param>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
+        /// <param name="handler">The <see cref="System.EventHandler{T}"/> to invoke.</param>
+        /// <param name="sender">The object that contains the event.</param>
+        /// <param name="args">The argument to be passed to the event.</param>
         public static void Raise<T>(this EventHandler<T> handler, object sender, T args) where T : EventArgs
         {
             if (handler != null)
@@ -177,11 +177,11 @@ namespace EventRaiser
         }
 
         /// <summary>
-        /// 
+        /// Invokes the <paramref name="handler"/> if it is not null.
         /// </summary>
-        /// <param name="handler"></param>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
+        /// <param name="handler">The <see cref="System.EventHandler"/> to invoke.</param>
+        /// <param name="sender">The object that contains the event.</param>
+        /// <param name="args">The argument to be passed to the event.</param>
         public static void Raise(this EventHandler handler, object sender, EventArgs args)
         {
             if (handler != null)
@@ -189,13 +189,13 @@ namespace EventRaiser
         }
 
         /// <summary>
-        /// 
+        /// Starts a new <see cref="System.Threading.Tasks.Task"/> that invokes the <paramref name="handler"/> if it is not null. This method returns immediately.
         /// </summary>
         /// <typeparam name="T">The type of <see cref="System.EventArgs"/> used by the handler.</typeparam>
-        /// <param name="handler"></param>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
+        /// <param name="handler">The <see cref="System.EventHandler{T}"/> to invoke.</param>
+        /// <param name="sender">The object that contains the event.</param>
+        /// <param name="args">The argument to be passed to the event.</param>
+        /// <returns>A <see cref="System.Threading.Tasks.Task"/> that represents invoking of the handler.</returns>
         public static Task RaiseAsync<T>(this EventHandler<T> handler, object sender, T args) where T : EventArgs
         {
             return Task.Factory.StartNew(() => handler.Raise(sender, args));
