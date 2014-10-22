@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>$id$</id>
-    <version>$version$</version>
-    <title>$title$</title>
-    <authors>$author$</authors>
-    <owners>$author$</owners>
+    <id>EventRaiser</id>
+    <version>1.0.0</version>
+    <title>EventRaiser</title>
+    <authors>Michael Melancon</authors>
+    <owners>Michael Melancon</owners>
     <licenseUrl>https://github.com/michaelmelancon/EventRaiser/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/michaelmelancon/EventRaiser/</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>$description$</description>
-    <copyright>Copyright 2014</copyright>
+    <description>A functional library for raising .NET events where a monadic structure is built around System.EventHandler&lt;T>.</description>
+    <copyright>Copyright 2014 Michael Melancon</copyright>
     <tags>Functional Monad Events EventHandler Extension</tags>
   </metadata>
 </package>
