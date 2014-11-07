@@ -49,6 +49,21 @@ namespace EventRaiser.Tests
 
 
         [TestMethod]
+        public void AllowsPlainToContravariantGenericConversion()
+        {
+            var handlerMock = new Mock<IEventHandler<EventArgs>>();
+            var sender = new object();
+            var args = new PropertyChangedEventArgs("Test");
+            handlerMock.Setup(o => o.HandleEvent(sender, args)).Verifiable();
+
+            EventHandler handler = handlerMock.Object.HandleEvent;
+            EventHandler<PropertyChangedEventArgs> newHandler = handler.ToHandlerOf<PropertyChangedEventArgs>();
+
+            newHandler(sender, args);
+            handlerMock.Verify(h => h.HandleEvent(sender, args), Times.Once);
+        }
+
+        [TestMethod]
         public void AllowsContravariantConversion()
         {
             var handlerMock = new Mock<IEventHandler<EventArgs>>();
